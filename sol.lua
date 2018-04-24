@@ -1,7 +1,7 @@
 local Sol = {
   _VERSION     = 'sol v0.0.0',
   _URL         = 'https://github.com/oniietzschan/sol',
-  _DESCRIPTION = 'Format esoteric date and time formats in Lua!',
+  _DESCRIPTION = 'Format esoteric date notations in Lua!',
   _LICENSE     = [[
     Massachusecchu... あれっ！ Massachu... chu... chu... License!
 
@@ -27,31 +27,24 @@ local Sol = {
   ]]
 }
 
-local Gregorian = {}
-local GregorianMt = {__index = Gregorian}
+local JAPANESE_EMPERORS = {
+  {1989,  1,  8, '平成', 'Heisei'},
+  {1926, 12, 25, '昭和', 'Shouwa'},
+  {1912,  7, 31, '大正', 'Taishou'},
+  {1868, 10, 23, '明治', 'Meiji'},
+  {   0,  1,  1, '耶蘇', 'Jesus'},
+}
 
-local Nippon = {}
-local NipponMt = {__index = Nippon}
-
-function Gregorian:init(year, month, day)
-  self._year = year
-  self._month = month
-  self._day = day
-  return self
-end
-
-function Gregorian:toNippon()
-  return Sol.newNippon(self._year, self._month, self._day)
-end
-
-function Sol.newGregorian(...)
-  return setmetatable({}, GregorianMt)
-    :init(...)
-end
-
-function Sol.newNippon(...)
-  return setmetatable({}, NipponMt)
-    :init(...)
+function Sol.formatJapanese(year, month, day)
+  local y, m, d, kanji, romaji
+  for _, t in ipairs(JAPANESE_EMPERORS) do
+    y, m, d, kanji, romaji = t[1], t[2], t[3], t[4], t[5]
+    if (year > y) or (year == y and month > m) or (year == y and month == m and day >= d) then
+      break
+    end
+  end
+  local eraYear = year - y + 1
+  return ('%s%d年%d月%d日'):format(kanji, eraYear, month, day)
 end
 
 return Sol

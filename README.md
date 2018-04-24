@@ -12,4 +12,9 @@ Example
 
 ```lua
 local Sol = require 'sol'
+
+-- Japanese Nengou (Emperor Eras)
+Sol.formatJapanese(2001, 9, 11) -- 平成13年9月11日
+Sol.formatJapanese(1912, 7, 31) -- 大正1年7月31日
+Sol.formatJapanese(1912, 7, 30) -- 明治45年7月30日
 ```
