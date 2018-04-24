@@ -27,6 +27,21 @@ local Sol = {
   ]]
 }
 
+local JACOBITE_MONARCHS = {
+  {1996,  7,  8, 'Francis II'},
+  {1955,  8,  2, 'Albert'},
+  {1919,  2,  3, 'Robert'},
+  {1875, 11, 20, 'Mary IV'},
+  {1840,  9, 15, 'Fracis I'},
+  {1824,  1, 10, 'Mary III'},
+  {1819, 10,  6, 'Victor'},
+  {1807,  7, 12, 'Charles IV'},
+  {1788,  1, 31, 'Henry IX'},
+  {1766,  1,  1, 'Charles III'},
+  {1701,  9, 16, 'James III'},
+  {1688, 12, 11, 'James II'},
+}
+
 local JAPANESE_EMPERORS = {
   {1989,  1,  8, '平成', 'Heisei'},
   {1926, 12, 25, '昭和', 'Shouwa'},
@@ -61,14 +76,20 @@ local MONTHS = {
   'December',
 }
 
+function Sol.formatJacobite(year, month, day)
+  local fullMonth = Sol._getFullMonth(month)
+  local era, eraYear = Sol._getEra(year, month, day, JACOBITE_MONARCHS)
+  return ('%d %s, %d %s'):format(day, fullMonth, eraYear, era)
+end
+
 function Sol.formatJapanese(year, month, day)
-  local era, eraYear = Sol._getEra(year, month, day, JAPANESE_EMPERORS, 4)
+  local era, eraYear = Sol._getEra(year, month, day, JAPANESE_EMPERORS, true)
   return ('%s%d年%d月%d日'):format(era, eraYear, month, day)
 end
 
 function Sol.formatSophia(year, month, day)
   local fullMonth = Sol._getFullMonth(month)
-  local era, eraYear = Sol._getEra(year, month, day, SOPHIA_MONARCHS, 4)
+  local era, eraYear = Sol._getEra(year, month, day, SOPHIA_MONARCHS)
   return ('%d %s, %d %s'):format(day, fullMonth, eraYear, era)
 end
 
@@ -76,15 +97,18 @@ function Sol._getFullMonth(i)
   return MONTHS[i]
 end
 
-function Sol._getEra(year, month, day, monarchs, eraIndex)
+function Sol._getEra(year, month, day, monarchs, rolloverOnJan1)
   local y, m, d, era
   for _, t in ipairs(monarchs) do
-    y, m, d, era = t[1], t[2], t[3], t[eraIndex]
+    y, m, d, era = t[1], t[2], t[3], t[4]
     if (year > y) or (year == y and month > m) or (year == y and month == m and day >= d) then
       break
     end
   end
-  local eraYear = year - y + 1
+  local eraYear = year - y
+  if rolloverOnJan1 or (month > m) or (month == m and day >= d) then
+    eraYear = eraYear + 1
+  end
   return era, eraYear
 end
 

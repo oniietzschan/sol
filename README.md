@@ -13,12 +13,17 @@ Example
 ```lua
 local Sol = require 'sol'
 
--- Japanese Nengou (Emperor Eras)
+-- Regnal Year of Jacobite Succession
+Sol.formatJacobite(2018,  4, 24) -- returns "24 April, 22 Francis II"
+Sol.formatJacobite(1702,  3,  8) -- returns "8 March, 1702, 1 James III"
+Sol.formatJacobite(1689, 12, 16) -- returns "16 December, 2 James II"
+
+-- Japanese Nengou (Emperor Era)
 Sol.formatJapanese(2001, 9, 11) -- returns "平成13年9月11日"
 Sol.formatJapanese(1912, 7, 31) -- returns "大正1年7月31日"
 Sol.formatJapanese(1912, 7, 30) -- returns "明治45年7月30日"
 
 -- Regnal Year of Sophia Succession (British Commonwealth)
 Sol.formatSophia(2018, 4, 20) -- returns "20 April, 67 Elizabeth II"
-Sol.formatSophia(1901, 1, 21) -- returns "21 January, 65 Victoria"
+Sol.formatSophia(1901, 1, 21) -- returns "21 January, 64 Victoria"
 ```
