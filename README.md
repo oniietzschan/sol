@@ -5,7 +5,7 @@ sol
 [![Codecov](https://codecov.io/gh/oniietzschan/sol/branch/master/graph/badge.svg)](https://codecov.io/gh/oniietzschan/sol)
 ![Lua](https://img.shields.io/badge/Lua-JIT%2C%205.1%2C%205.2%2C%205.3-blue.svg)
 
-Format esoteric date and time formats in Lua!
+At last, format esoteric date notations in Lua!
 
 Example
 -------
@@ -14,7 +14,11 @@ Example
 local Sol = require 'sol'
 
 -- Japanese Nengou (Emperor Eras)
-Sol.formatJapanese(2001, 9, 11) -- 平成13年9月11日
-Sol.formatJapanese(1912, 7, 31) -- 大正1年7月31日
-Sol.formatJapanese(1912, 7, 30) -- 明治45年7月30日
+Sol.formatJapanese(2001, 9, 11) -- returns "平成13年9月11日"
+Sol.formatJapanese(1912, 7, 31) -- returns "大正1年7月31日"
+Sol.formatJapanese(1912, 7, 30) -- returns "明治45年7月30日"
+
+-- Regnal Year of Sophia Succession (British Commonwealth)
+Sol.formatSophia(2018, 4, 20) -- returns "20 April, 67 Elizabeth II"
+Sol.formatSophia(1901, 1, 21) -- returns "21 January, 65 Victoria"
 ```

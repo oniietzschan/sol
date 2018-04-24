@@ -1,7 +1,7 @@
 local Sol = {
   _VERSION     = 'sol v0.0.0',
   _URL         = 'https://github.com/oniietzschan/sol',
-  _DESCRIPTION = 'Format esoteric date notations in Lua!',
+  _DESCRIPTION = 'At last, format esoteric date notations in Lua!',
   _LICENSE     = [[
     Massachusecchu... あれっ！ Massachu... chu... chu... License!
 
@@ -32,19 +32,60 @@ local JAPANESE_EMPERORS = {
   {1926, 12, 25, '昭和', 'Shouwa'},
   {1912,  7, 31, '大正', 'Taishou'},
   {1868, 10, 23, '明治', 'Meiji'},
+  -- <Incomplete>
   {   0,  1,  1, '耶蘇', 'Jesus'},
 }
 
+local SOPHIA_MONARCHS = {
+  {1952,  2,  6, 'Elizabeth II'},
+  {1936, 12, 11, 'George VI'},
+  {1936,  1, 20, 'Edward VIII'},
+  {1910,  5,  6, 'George V'},
+  {1901,  1, 22, 'Edward VII'},
+  {1837,  6, 20, 'Victoria'},
+  -- <Incomplete>
+}
+
+local MONTHS = {
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+}
+
 function Sol.formatJapanese(year, month, day)
-  local y, m, d, kanji, romaji
-  for _, t in ipairs(JAPANESE_EMPERORS) do
-    y, m, d, kanji, romaji = t[1], t[2], t[3], t[4], t[5]
+  local era, eraYear = Sol._getEra(year, month, day, JAPANESE_EMPERORS, 4)
+  return ('%s%d年%d月%d日'):format(era, eraYear, month, day)
+end
+
+function Sol.formatSophia(year, month, day)
+  local fullMonth = Sol._getFullMonth(month)
+  local era, eraYear = Sol._getEra(year, month, day, SOPHIA_MONARCHS, 4)
+  return ('%d %s, %d %s'):format(day, fullMonth, eraYear, era)
+end
+
+function Sol._getFullMonth(i)
+  return MONTHS[i]
+end
+
+function Sol._getEra(year, month, day, monarchs, eraIndex)
+  local y, m, d, era
+  for _, t in ipairs(monarchs) do
+    y, m, d, era = t[1], t[2], t[3], t[eraIndex]
     if (year > y) or (year == y and month > m) or (year == y and month == m and day >= d) then
       break
     end
   end
   local eraYear = year - y + 1
-  return ('%s%d年%d月%d日'):format(kanji, eraYear, month, day)
+  return era, eraYear
 end
 
 return Sol
